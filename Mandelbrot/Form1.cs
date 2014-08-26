@@ -18,6 +18,9 @@ namespace Mandelbrot
         private int width = 600;
         private int height = 600;
         private int depth = 20;
+        private double zoom = 1;
+        private double map_x = -2.0;
+        private double map_y = -1.5;
 
         private DateTime timeStart;
         private DateTime timeEnd;
@@ -72,6 +75,9 @@ namespace Mandelbrot
             numWidth.Value = width;
             numHeight.Value = height;
             numDepth.Value = depth;
+            numMapX.Value = Convert.ToDecimal(map_x);
+            numMapY.Value = Convert.ToDecimal(map_y);
+            numZoom.Value = Convert.ToDecimal(zoom);
         }
 
         private void numWidth_ValueChanged(object sender, EventArgs e)
@@ -95,25 +101,24 @@ namespace Mandelbrot
             using (Graphics graph = Graphics.FromImage(mandelbrot))
             {
                 Rectangle ImageSize = new Rectangle(0, 0, width, height);
-                graph.FillRectangle(Brushes.White, ImageSize);
+                graph.FillRectangle(Brushes.Black, ImageSize);
             }
 
             for (int x = 0; x < width; x++)
             {
-                double real = x / ((double)width / 3.0) - 1.5;
-                for (int y = 0; y < height / 2; y++)
+                double real = (x / ((double)width / 3.0) + map_x) / zoom;
+                for (int y = 0; y < height; y++) 
                 {
                     if (bgWorker.CancellationPending)
                     {
                         e.Cancel = true;
                         return;
                     }
-                    double img = y / ((double)height / 3.0) - 1.5;
+                    double img = (y / ((double)height / 3.0) + map_y) / zoom;
                     Complex c = new Complex(real, img);
                     if (Mandel(c))
                     {
-                        mandelbrot.SetPixel(x, y, Color.Black);
-                        mandelbrot.SetPixel(x, height - y - 1, Color.Black);
+                        mandelbrot.SetPixel(x, y, Color.White);
                     }
                 }
                 bgWorker.ReportProgress((int)(((double)(x + 1) / (double)width) * 100.0));
@@ -147,6 +152,21 @@ namespace Mandelbrot
             {
                 mandelbrot.Save(save.FileName, System.Drawing.Imaging.ImageFormat.Bmp);
             }
+        }
+
+        private void numMapX_ValueChanged(object sender, EventArgs e)
+        {
+            map_x = Convert.ToDouble(numMapX.Value);
+        }
+
+        private void numMapY_ValueChanged(object sender, EventArgs e)
+        {
+            map_y = Convert.ToDouble(numMapY.Value);
+        }
+
+        private void numZoom_ValueChanged(object sender, EventArgs e)
+        {
+            zoom = Convert.ToDouble(numZoom.Value);
         }
     }
 }

@@ -42,10 +42,19 @@
             this.pBar = new System.Windows.Forms.ProgressBar();
             this.lblDuration = new System.Windows.Forms.Label();
             this.btnSave = new System.Windows.Forms.Button();
+            this.lblZoom = new System.Windows.Forms.Label();
+            this.numZoom = new System.Windows.Forms.NumericUpDown();
+            this.lblMapX = new System.Windows.Forms.Label();
+            this.numMapX = new System.Windows.Forms.NumericUpDown();
+            this.lblMapY = new System.Windows.Forms.Label();
+            this.numMapY = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.picMandelbrot)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numHeight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numDepth)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numZoom)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numMapX)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numMapY)).BeginInit();
             this.SuspendLayout();
             // 
             // btnDraw
@@ -65,9 +74,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.picMandelbrot.BackColor = System.Drawing.Color.White;
             this.picMandelbrot.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.picMandelbrot.Location = new System.Drawing.Point(12, 66);
+            this.picMandelbrot.Location = new System.Drawing.Point(12, 94);
             this.picMandelbrot.Name = "picMandelbrot";
-            this.picMandelbrot.Size = new System.Drawing.Size(760, 483);
+            this.picMandelbrot.Size = new System.Drawing.Size(760, 455);
             this.picMandelbrot.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.picMandelbrot.TabIndex = 1;
             this.picMandelbrot.TabStop = false;
@@ -208,7 +217,7 @@
             // 
             this.pBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.pBar.Location = new System.Drawing.Point(13, 42);
+            this.pBar.Location = new System.Drawing.Point(12, 70);
             this.pBar.Name = "pBar";
             this.pBar.Size = new System.Drawing.Size(759, 18);
             this.pBar.TabIndex = 10;
@@ -232,11 +241,131 @@
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
+            // lblZoom
+            // 
+            this.lblZoom.AutoSize = true;
+            this.lblZoom.Location = new System.Drawing.Point(439, 44);
+            this.lblZoom.Name = "lblZoom";
+            this.lblZoom.Size = new System.Drawing.Size(34, 13);
+            this.lblZoom.TabIndex = 18;
+            this.lblZoom.Text = "Zoom";
+            // 
+            // numZoom
+            // 
+            this.numZoom.DecimalPlaces = 2;
+            this.numZoom.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.numZoom.Location = new System.Drawing.Point(480, 42);
+            this.numZoom.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.numZoom.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.numZoom.Name = "numZoom";
+            this.numZoom.Size = new System.Drawing.Size(80, 20);
+            this.numZoom.TabIndex = 17;
+            this.numZoom.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numZoom.ValueChanged += new System.EventHandler(this.numZoom_ValueChanged);
+            // 
+            // lblMapX
+            // 
+            this.lblMapX.AutoSize = true;
+            this.lblMapX.Location = new System.Drawing.Point(180, 44);
+            this.lblMapX.Name = "lblMapX";
+            this.lblMapX.Size = new System.Drawing.Size(38, 13);
+            this.lblMapX.TabIndex = 14;
+            this.lblMapX.Text = "Map X";
+            // 
+            // numMapX
+            // 
+            this.numMapX.DecimalPlaces = 2;
+            this.numMapX.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.numMapX.Location = new System.Drawing.Point(221, 42);
+            this.numMapX.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.numMapX.Minimum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            -2147483648});
+            this.numMapX.Name = "numMapX";
+            this.numMapX.Size = new System.Drawing.Size(80, 20);
+            this.numMapX.TabIndex = 13;
+            this.numMapX.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            -2147483648});
+            this.numMapX.ValueChanged += new System.EventHandler(this.numMapX_ValueChanged);
+            // 
+            // lblMapY
+            // 
+            this.lblMapY.AutoSize = true;
+            this.lblMapY.Location = new System.Drawing.Point(307, 44);
+            this.lblMapY.Name = "lblMapY";
+            this.lblMapY.Size = new System.Drawing.Size(38, 13);
+            this.lblMapY.TabIndex = 20;
+            this.lblMapY.Text = "Map Y";
+            // 
+            // numMapY
+            // 
+            this.numMapY.DecimalPlaces = 2;
+            this.numMapY.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.numMapY.Location = new System.Drawing.Point(348, 42);
+            this.numMapY.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.numMapY.Minimum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            -2147483648});
+            this.numMapY.Name = "numMapY";
+            this.numMapY.Size = new System.Drawing.Size(80, 20);
+            this.numMapY.TabIndex = 19;
+            this.numMapY.Value = new decimal(new int[] {
+            15,
+            0,
+            0,
+            -2147418112});
+            this.numMapY.ValueChanged += new System.EventHandler(this.numMapY_ValueChanged);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(784, 561);
+            this.Controls.Add(this.lblMapY);
+            this.Controls.Add(this.numMapY);
+            this.Controls.Add(this.lblZoom);
+            this.Controls.Add(this.numZoom);
+            this.Controls.Add(this.lblMapX);
+            this.Controls.Add(this.numMapX);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.lblDuration);
             this.Controls.Add(this.pBar);
@@ -258,6 +387,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.numWidth)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numHeight)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numDepth)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numZoom)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numMapX)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numMapY)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -279,6 +411,12 @@
         private System.Windows.Forms.ProgressBar pBar;
         private System.Windows.Forms.Label lblDuration;
         private System.Windows.Forms.Button btnSave;
+        private System.Windows.Forms.Label lblZoom;
+        private System.Windows.Forms.NumericUpDown numZoom;
+        private System.Windows.Forms.Label lblMapX;
+        private System.Windows.Forms.NumericUpDown numMapX;
+        private System.Windows.Forms.Label lblMapY;
+        private System.Windows.Forms.NumericUpDown numMapY;
     }
 }
 
