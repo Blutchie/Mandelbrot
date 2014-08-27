@@ -55,7 +55,7 @@ namespace Mandelbrot
                 lblEnd.Text = "End:";
                 lblDuration.Text = "Duration:";
 
-                picMandelbrot.Image = null;
+               // picMandelbrot.Image = null;
             }
             else
             {
@@ -66,7 +66,7 @@ namespace Mandelbrot
                 lblEnd.Text = "End:";
                 lblDuration.Text = "Duration:";
 
-                picMandelbrot.Image = null;
+                //picMandelbrot.Image = null;
                 bgWorker.RunWorkerAsync();
             }
             
@@ -170,24 +170,24 @@ namespace Mandelbrot
             }
         }
 
-        private void numRMin_ValueChanged(object sender, EventArgs e)
-        {
-            rMin = (double)numRMin.Value;
-        }
 
-        private void numRMax_ValueChanged(object sender, EventArgs e)
+        private void mapping_Changed(object sender, EventArgs e)
         {
-            rMax = (double)numRMax.Value;
-        }
+            double zoom = (double)numZoom.Value;
 
-        private void numIMin_ValueChanged(object sender, EventArgs e)
-        {
-            iMin = (double)numIMin.Value;
-        }
+            double initRMin = (double)numRMin.Value;
+            double initRMax = (double)numRMax.Value;
 
-        private void numIMax_ValueChanged(object sender, EventArgs e)
-        {
-            iMax = (double)numIMax.Value;
+            double initIMin = (double)numIMin.Value;
+            double initIMax = (double)numIMax.Value;
+
+            double moveX = (double)numMoveX.Value;
+            double moveY = (double)numMoveY.Value;
+
+            rMin = (initRMin - moveX) * (1 / zoom);
+            rMax = (initRMax - moveX) * (1 / zoom);
+            iMin = (initIMin + moveY) * (1 / zoom);
+            iMax = (initIMax + moveY) * (1 / zoom);
         }
 
     }
