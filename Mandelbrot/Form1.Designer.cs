@@ -42,19 +42,22 @@
             this.pBar = new System.Windows.Forms.ProgressBar();
             this.lblDuration = new System.Windows.Forms.Label();
             this.btnSave = new System.Windows.Forms.Button();
-            this.lblZoom = new System.Windows.Forms.Label();
-            this.numZoom = new System.Windows.Forms.NumericUpDown();
-            this.lblMapX = new System.Windows.Forms.Label();
-            this.numMapX = new System.Windows.Forms.NumericUpDown();
-            this.lblMapY = new System.Windows.Forms.Label();
-            this.numMapY = new System.Windows.Forms.NumericUpDown();
+            this.lblIMin = new System.Windows.Forms.Label();
+            this.numIMin = new System.Windows.Forms.NumericUpDown();
+            this.lblRMin = new System.Windows.Forms.Label();
+            this.numRMin = new System.Windows.Forms.NumericUpDown();
+            this.lblRMax = new System.Windows.Forms.Label();
+            this.numRMax = new System.Windows.Forms.NumericUpDown();
+            this.lblIMax = new System.Windows.Forms.Label();
+            this.numIMax = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.picMandelbrot)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numHeight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numDepth)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numZoom)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numMapX)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numMapY)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numIMin)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numRMin)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numRMax)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numIMax)).BeginInit();
             this.SuspendLayout();
             // 
             // btnDraw
@@ -103,7 +106,7 @@
             this.numWidth.Size = new System.Drawing.Size(80, 20);
             this.numWidth.TabIndex = 2;
             this.numWidth.Value = new decimal(new int[] {
-            10000,
+            1920,
             0,
             0,
             0});
@@ -149,7 +152,7 @@
             this.numHeight.Size = new System.Drawing.Size(80, 20);
             this.numHeight.TabIndex = 4;
             this.numHeight.Value = new decimal(new int[] {
-            10000,
+            1080,
             0,
             0,
             0});
@@ -181,7 +184,7 @@
             this.numDepth.Size = new System.Drawing.Size(80, 20);
             this.numDepth.TabIndex = 6;
             this.numDepth.Value = new decimal(new int[] {
-            1000,
+            200,
             0,
             0,
             0});
@@ -241,131 +244,171 @@
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
-            // lblZoom
+            // lblIMin
             // 
-            this.lblZoom.AutoSize = true;
-            this.lblZoom.Location = new System.Drawing.Point(439, 44);
-            this.lblZoom.Name = "lblZoom";
-            this.lblZoom.Size = new System.Drawing.Size(34, 13);
-            this.lblZoom.TabIndex = 18;
-            this.lblZoom.Text = "Zoom";
+            this.lblIMin.AutoSize = true;
+            this.lblIMin.Location = new System.Drawing.Point(439, 44);
+            this.lblIMin.Name = "lblIMin";
+            this.lblIMin.Size = new System.Drawing.Size(26, 13);
+            this.lblIMin.TabIndex = 18;
+            this.lblIMin.Text = "iMin";
             // 
-            // numZoom
+            // numIMin
             // 
-            this.numZoom.DecimalPlaces = 2;
-            this.numZoom.Increment = new decimal(new int[] {
+            this.numIMin.DecimalPlaces = 2;
+            this.numIMin.Increment = new decimal(new int[] {
             1,
             0,
             0,
             65536});
-            this.numZoom.Location = new System.Drawing.Point(480, 42);
-            this.numZoom.Maximum = new decimal(new int[] {
-            1000,
+            this.numIMin.Location = new System.Drawing.Point(480, 42);
+            this.numIMin.Maximum = new decimal(new int[] {
+            5,
             0,
             0,
             0});
-            this.numZoom.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.numZoom.Name = "numZoom";
-            this.numZoom.Size = new System.Drawing.Size(80, 20);
-            this.numZoom.TabIndex = 17;
-            this.numZoom.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.numZoom.ValueChanged += new System.EventHandler(this.numZoom_ValueChanged);
-            // 
-            // lblMapX
-            // 
-            this.lblMapX.AutoSize = true;
-            this.lblMapX.Location = new System.Drawing.Point(180, 44);
-            this.lblMapX.Name = "lblMapX";
-            this.lblMapX.Size = new System.Drawing.Size(38, 13);
-            this.lblMapX.TabIndex = 14;
-            this.lblMapX.Text = "Map X";
-            // 
-            // numMapX
-            // 
-            this.numMapX.DecimalPlaces = 2;
-            this.numMapX.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.numMapX.Location = new System.Drawing.Point(221, 42);
-            this.numMapX.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            this.numMapX.Minimum = new decimal(new int[] {
-            1000,
+            this.numIMin.Minimum = new decimal(new int[] {
+            5,
             0,
             0,
             -2147483648});
-            this.numMapX.Name = "numMapX";
-            this.numMapX.Size = new System.Drawing.Size(80, 20);
-            this.numMapX.TabIndex = 13;
-            this.numMapX.Value = new decimal(new int[] {
-            2,
-            0,
-            0,
-            -2147483648});
-            this.numMapX.ValueChanged += new System.EventHandler(this.numMapX_ValueChanged);
-            // 
-            // lblMapY
-            // 
-            this.lblMapY.AutoSize = true;
-            this.lblMapY.Location = new System.Drawing.Point(307, 44);
-            this.lblMapY.Name = "lblMapY";
-            this.lblMapY.Size = new System.Drawing.Size(38, 13);
-            this.lblMapY.TabIndex = 20;
-            this.lblMapY.Text = "Map Y";
-            // 
-            // numMapY
-            // 
-            this.numMapY.DecimalPlaces = 2;
-            this.numMapY.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.numMapY.Location = new System.Drawing.Point(348, 42);
-            this.numMapY.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            this.numMapY.Minimum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            -2147483648});
-            this.numMapY.Name = "numMapY";
-            this.numMapY.Size = new System.Drawing.Size(80, 20);
-            this.numMapY.TabIndex = 19;
-            this.numMapY.Value = new decimal(new int[] {
-            15,
+            this.numIMin.Name = "numIMin";
+            this.numIMin.Size = new System.Drawing.Size(80, 20);
+            this.numIMin.TabIndex = 17;
+            this.numIMin.Value = new decimal(new int[] {
+            12,
             0,
             0,
             -2147418112});
-            this.numMapY.ValueChanged += new System.EventHandler(this.numMapY_ValueChanged);
+            this.numIMin.ValueChanged += new System.EventHandler(this.numIMin_ValueChanged);
+            // 
+            // lblRMin
+            // 
+            this.lblRMin.AutoSize = true;
+            this.lblRMin.Location = new System.Drawing.Point(180, 44);
+            this.lblRMin.Name = "lblRMin";
+            this.lblRMin.Size = new System.Drawing.Size(27, 13);
+            this.lblRMin.TabIndex = 14;
+            this.lblRMin.Text = "rMin";
+            // 
+            // numRMin
+            // 
+            this.numRMin.DecimalPlaces = 2;
+            this.numRMin.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.numRMin.Location = new System.Drawing.Point(221, 42);
+            this.numRMin.Maximum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.numRMin.Minimum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            -2147483648});
+            this.numRMin.Name = "numRMin";
+            this.numRMin.Size = new System.Drawing.Size(80, 20);
+            this.numRMin.TabIndex = 13;
+            this.numRMin.Value = new decimal(new int[] {
+            25,
+            0,
+            0,
+            -2147418112});
+            this.numRMin.ValueChanged += new System.EventHandler(this.numRMin_ValueChanged);
+            // 
+            // lblRMax
+            // 
+            this.lblRMax.AutoSize = true;
+            this.lblRMax.Location = new System.Drawing.Point(307, 44);
+            this.lblRMax.Name = "lblRMax";
+            this.lblRMax.Size = new System.Drawing.Size(30, 13);
+            this.lblRMax.TabIndex = 20;
+            this.lblRMax.Text = "rMax";
+            // 
+            // numRMax
+            // 
+            this.numRMax.DecimalPlaces = 2;
+            this.numRMax.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.numRMax.Location = new System.Drawing.Point(348, 42);
+            this.numRMax.Maximum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.numRMax.Minimum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            -2147483648});
+            this.numRMax.Name = "numRMax";
+            this.numRMax.Size = new System.Drawing.Size(80, 20);
+            this.numRMax.TabIndex = 19;
+            this.numRMax.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numRMax.ValueChanged += new System.EventHandler(this.numRMax_ValueChanged);
+            // 
+            // lblIMax
+            // 
+            this.lblIMax.AutoSize = true;
+            this.lblIMax.Location = new System.Drawing.Point(567, 44);
+            this.lblIMax.Name = "lblIMax";
+            this.lblIMax.Size = new System.Drawing.Size(29, 13);
+            this.lblIMax.TabIndex = 22;
+            this.lblIMax.Text = "iMax";
+            // 
+            // numIMax
+            // 
+            this.numIMax.DecimalPlaces = 2;
+            this.numIMax.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.numIMax.Location = new System.Drawing.Point(608, 42);
+            this.numIMax.Maximum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.numIMax.Minimum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            -2147483648});
+            this.numIMax.Name = "numIMax";
+            this.numIMax.Size = new System.Drawing.Size(80, 20);
+            this.numIMax.TabIndex = 21;
+            this.numIMax.Value = new decimal(new int[] {
+            12,
+            0,
+            0,
+            65536});
+            this.numIMax.ValueChanged += new System.EventHandler(this.numIMax_ValueChanged);
             // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(784, 561);
-            this.Controls.Add(this.lblMapY);
-            this.Controls.Add(this.numMapY);
-            this.Controls.Add(this.lblZoom);
-            this.Controls.Add(this.numZoom);
-            this.Controls.Add(this.lblMapX);
-            this.Controls.Add(this.numMapX);
+            this.Controls.Add(this.lblIMax);
+            this.Controls.Add(this.numIMax);
+            this.Controls.Add(this.lblRMax);
+            this.Controls.Add(this.numRMax);
+            this.Controls.Add(this.lblIMin);
+            this.Controls.Add(this.numIMin);
+            this.Controls.Add(this.lblRMin);
+            this.Controls.Add(this.numRMin);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.lblDuration);
             this.Controls.Add(this.pBar);
@@ -387,9 +430,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.numWidth)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numHeight)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numDepth)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numZoom)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numMapX)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numMapY)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numIMin)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numRMin)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numRMax)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numIMax)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -411,12 +455,14 @@
         private System.Windows.Forms.ProgressBar pBar;
         private System.Windows.Forms.Label lblDuration;
         private System.Windows.Forms.Button btnSave;
-        private System.Windows.Forms.Label lblZoom;
-        private System.Windows.Forms.NumericUpDown numZoom;
-        private System.Windows.Forms.Label lblMapX;
-        private System.Windows.Forms.NumericUpDown numMapX;
-        private System.Windows.Forms.Label lblMapY;
-        private System.Windows.Forms.NumericUpDown numMapY;
+        private System.Windows.Forms.Label lblIMin;
+        private System.Windows.Forms.NumericUpDown numIMin;
+        private System.Windows.Forms.Label lblRMin;
+        private System.Windows.Forms.NumericUpDown numRMin;
+        private System.Windows.Forms.Label lblRMax;
+        private System.Windows.Forms.NumericUpDown numRMax;
+        private System.Windows.Forms.Label lblIMax;
+        private System.Windows.Forms.NumericUpDown numIMax;
     }
 }
 

@@ -16,12 +16,13 @@ namespace Mandelbrot
     public partial class frmMain : Form
     {
         Bitmap mandelbrot;
-        private int width = 600;
-        private int height = 600;
-        private int depth = 20;
-        private double zoom = 1;
-        private double map_x = -2.0;
-        private double map_y = -1.5;
+        private int width = 1920;
+        private int height = 1080;
+        private int depth = 200;
+        private double rMin = -2.5;
+        private double rMax = 1.0;
+        private double iMin = -1.2;
+        private double iMax = 1.2;
 
         private DateTime timeStart;
         private DateTime timeEnd;
@@ -33,13 +34,13 @@ namespace Mandelbrot
 
         private Color Mandel(Complex c)
         {
-            Complex z = 0;
+            Complex z = c;
             for (int h = 0; h <= depth; h++)
             {
                 if (z.Magnitude >= 2) return Color.FromArgb(0, (8 * h) % 255, (16 * h) % 255);
                 z = Complex.Pow(z, 2) + c;
             }
-            return Color.Black; ;
+            return Color.Black;
         }
 
 
@@ -50,7 +51,7 @@ namespace Mandelbrot
                 btnDraw.Text = "Draw mandelbrot";
                 bgWorker.CancelAsync();
                 pBar.Value = 0;
-                lblStart.Text = "Start:"; ;
+                lblStart.Text = "Start:";
                 lblEnd.Text = "End:";
                 lblDuration.Text = "Duration:";
 
@@ -76,9 +77,10 @@ namespace Mandelbrot
             numWidth.Value = width;
             numHeight.Value = height;
             numDepth.Value = depth;
-            numMapX.Value = Convert.ToDecimal(map_x);
-            numMapY.Value = Convert.ToDecimal(map_y);
-            numZoom.Value = Convert.ToDecimal(zoom);
+            numRMin.Value = Convert.ToDecimal(rMin);
+            numRMax.Value = Convert.ToDecimal(rMax);
+            numIMin.Value = Convert.ToDecimal(iMin);
+            numIMax.Value = Convert.ToDecimal(iMax);
         }
 
         private void numWidth_ValueChanged(object sender, EventArgs e)
@@ -94,6 +96,7 @@ namespace Mandelbrot
         private void numDepth_ValueChanged(object sender, EventArgs e)
         {
             depth = (int)numDepth.Value;
+
         }
 
         private unsafe void bgWorker_DoWork(object sender, DoWorkEventArgs e)
@@ -101,13 +104,15 @@ namespace Mandelbrot
             double pixels_total = width * height;
             double pixels_done = 0;
 
+            double rScale = (Math.Abs(rMin) + Math.Abs(rMax)) / width; // Amount to move each pixel in the real numbers
+            double iScale = (Math.Abs(iMin) + Math.Abs(iMax)) / height; // Amount to move each pixel in the imaginary numbers
+
             mandelbrot = new Bitmap(width, height);
             BitmapData data = mandelbrot.LockBits(new Rectangle(0, 0, mandelbrot.Width, mandelbrot.Height), ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
             IntPtr scan0 = data.Scan0;
 
             Parallel.For(0, width, x => 
             {
-                double real = (x / ((double)width / 3.0) + map_x) / zoom;
                 for (int y = 0; y < height; y++)
                 {
                    if (bgWorker.CancellationPending)
@@ -115,9 +120,8 @@ namespace Mandelbrot
                        e.Cancel = true;
                        return;
                    }
-                   double img = (y / ((double)height / 3.0) + map_y) / zoom;
-                   Complex c = new Complex(real, img);
-
+                   Complex c = new Complex(x * rScale + rMin, y * iScale + iMin); // Scaled complex number
+                   
                    Color pixel = Mandel(c);
                    byte* imagePointer = (byte*)scan0.ToPointer();
                    int offset = (y * data.Stride) + (3 * x);
@@ -166,19 +170,25 @@ namespace Mandelbrot
             }
         }
 
-        private void numMapX_ValueChanged(object sender, EventArgs e)
+        private void numRMin_ValueChanged(object sender, EventArgs e)
         {
-            map_x = Convert.ToDouble(numMapX.Value);
+            rMin = (double)numRMin.Value;
         }
 
-        private void numMapY_ValueChanged(object sender, EventArgs e)
+        private void numRMax_ValueChanged(object sender, EventArgs e)
         {
-            map_y = Convert.ToDouble(numMapY.Value);
+            rMax = (double)numRMax.Value;
         }
 
-        private void numZoom_ValueChanged(object sender, EventArgs e)
+        private void numIMin_ValueChanged(object sender, EventArgs e)
         {
-            zoom = Convert.ToDouble(numZoom.Value);
+            iMin = (double)numIMin.Value;
         }
+
+        private void numIMax_ValueChanged(object sender, EventArgs e)
+        {
+            iMax = (double)numIMax.Value;
+        }
+
     }
 }
