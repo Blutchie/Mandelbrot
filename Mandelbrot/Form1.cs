@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Numerics;
 using System.Threading;
+using System.Drawing.Imaging;
 
 namespace Mandelbrot
 {
@@ -30,15 +31,15 @@ namespace Mandelbrot
             InitializeComponent();
         }
 
-        private bool Mandel(Complex c)
+        private Color Mandel(Complex c)
         {
             Complex z = 0;
             for (int h = 0; h <= depth; h++)
             {
+                if (z.Magnitude >= 2) return Color.FromArgb(0, (8 * h) % 255, (16 * h) % 255);
                 z = Complex.Pow(z, 2) + c;
-                if (Complex.Abs(z) >= 2) return false;
             }
-            return true;
+            return Color.Black; ;
         }
 
 
@@ -95,35 +96,45 @@ namespace Mandelbrot
             depth = (int)numDepth.Value;
         }
 
-        private void bgWorker_DoWork(object sender, DoWorkEventArgs e)
+        private unsafe void bgWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            mandelbrot = new Bitmap(width, height);
-            using (Graphics graph = Graphics.FromImage(mandelbrot))
-            {
-                Rectangle ImageSize = new Rectangle(0, 0, width, height);
-                graph.FillRectangle(Brushes.Black, ImageSize);
-            }
+            double pixels_total = width * height;
+            double pixels_done = 0;
 
-            for (int x = 0; x < width; x++)
+            mandelbrot = new Bitmap(width, height);
+            BitmapData data = mandelbrot.LockBits(new Rectangle(0, 0, mandelbrot.Width, mandelbrot.Height), ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
+            IntPtr scan0 = data.Scan0;
+
+            Parallel.For(0, width, x => 
             {
                 double real = (x / ((double)width / 3.0) + map_x) / zoom;
-                for (int y = 0; y < height; y++) 
+                for (int y = 0; y < height; y++)
                 {
-                    if (bgWorker.CancellationPending)
-                    {
-                        e.Cancel = true;
-                        return;
-                    }
-                    double img = (y / ((double)height / 3.0) + map_y) / zoom;
-                    Complex c = new Complex(real, img);
-                    if (Mandel(c))
-                    {
-                        mandelbrot.SetPixel(x, y, Color.White);
-                    }
+                   if (bgWorker.CancellationPending)
+                   {
+                       e.Cancel = true;
+                       return;
+                   }
+                   double img = (y / ((double)height / 3.0) + map_y) / zoom;
+                   Complex c = new Complex(real, img);
+
+                   Color pixel = Mandel(c);
+                   byte* imagePointer = (byte*)scan0.ToPointer();
+                   int offset = (y * data.Stride) + (3 * x);
+                   byte* px = (imagePointer + offset);
+                   px[0] = pixel.B;
+                   px[1] = pixel.G;
+                   px[2] = pixel.R;
+
+                   pixels_done++;
                 }
-                bgWorker.ReportProgress((int)(((double)(x + 1) / (double)width) * 100.0));
-            }
+
+                bgWorker.ReportProgress((int)((pixels_done / pixels_total) * 100.0));
+                
+            });
+            mandelbrot.UnlockBits(data);
         }
+
 
         private void bgWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
@@ -134,6 +145,7 @@ namespace Mandelbrot
                 lblEnd.Text = "End: " + timeEnd.ToString("H:mm:ss.fff");
                 lblDuration.Text = "Duration: " + timeEnd.Subtract(timeStart);
                 btnDraw.Text = "Draw mandelbrot";
+                pBar.Value = 100;
             }
             
         }
