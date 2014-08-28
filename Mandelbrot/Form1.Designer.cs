@@ -466,13 +466,13 @@
             65536});
             this.numMoveX.Location = new System.Drawing.Point(613, 16);
             this.numMoveX.Maximum = new decimal(new int[] {
-            10,
-            0,
+            1410065408,
+            2,
             0,
             0});
             this.numMoveX.Minimum = new decimal(new int[] {
-            10,
-            0,
+            1410065408,
+            2,
             0,
             -2147483648});
             this.numMoveX.Name = "numMoveX";
@@ -490,13 +490,13 @@
             65536});
             this.numMoveY.Location = new System.Drawing.Point(745, 16);
             this.numMoveY.Maximum = new decimal(new int[] {
-            10,
-            0,
+            1410065408,
+            2,
             0,
             0});
             this.numMoveY.Minimum = new decimal(new int[] {
-            10,
-            0,
+            1410065408,
+            2,
             0,
             -2147483648});
             this.numMoveY.Name = "numMoveY";

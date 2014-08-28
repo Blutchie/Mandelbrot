@@ -32,17 +32,6 @@ namespace Mandelbrot
             InitializeComponent();
         }
 
-        private Color Mandel(Complex c)
-        {
-            Complex z = c;
-            for (int h = 0; h <= depth; h++)
-            {
-                if (z.Magnitude >= 2) return Color.FromArgb(0, (8 * h) % 255, (16 * h) % 255);
-                z = Complex.Pow(z, 2) + c;
-            }
-            return Color.Black;
-        }
-
 
         private void btnDraw_Click(object sender, EventArgs e)
         {
@@ -54,8 +43,6 @@ namespace Mandelbrot
                 lblStart.Text = "Start:";
                 lblEnd.Text = "End:";
                 lblDuration.Text = "Duration:";
-
-               // picMandelbrot.Image = null;
             }
             else
             {
@@ -65,8 +52,6 @@ namespace Mandelbrot
                 lblStart.Text = "Start: " + timeStart.ToString("H:mm:ss.fff");
                 lblEnd.Text = "End:";
                 lblDuration.Text = "Duration:";
-
-                //picMandelbrot.Image = null;
                 bgWorker.RunWorkerAsync();
             }
             
@@ -104,8 +89,8 @@ namespace Mandelbrot
             double pixels_total = width * height;
             double pixels_done = 0;
 
-            double rScale = (Math.Abs(rMin) + Math.Abs(rMax)) / width; // Amount to move each pixel in the real numbers
-            double iScale = (Math.Abs(iMin) + Math.Abs(iMax)) / height; // Amount to move each pixel in the imaginary numbers
+            double rScale = (rMax - rMin) / (width - 1); 
+            double iScale = (iMax - iMin) / (height - 1); 
 
             mandelbrot = new Bitmap(width, height);
             BitmapData data = mandelbrot.LockBits(new Rectangle(0, 0, mandelbrot.Width, mandelbrot.Height), ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
@@ -120,9 +105,23 @@ namespace Mandelbrot
                        e.Cancel = true;
                        return;
                    }
-                   Complex c = new Complex(x * rScale + rMin, y * iScale + iMin); // Scaled complex number
-                   
-                   Color pixel = Mandel(c);
+                   double c_re = rMin + x * rScale;
+                   double c_im = iMax - y * iScale;
+                   double Z_re = c_re, Z_im = c_im;
+
+                   Color pixel = Color.Black;
+                   for (int d = 0; d < depth; ++d)
+                   {
+                       double Z_re2 = Z_re * Z_re, Z_im2 = Z_im * Z_im;
+                       if (Z_re2 + Z_im2 > 4)
+                       {
+                           pixel = Color.FromArgb(0, (8 * d) % 255, (16 * d) % 255);
+                           break;
+                       }
+                       Z_im = 2 * Z_re * Z_im + c_im;
+                       Z_re = Z_re2 - Z_im2 + c_re;
+                   }
+
                    byte* imagePointer = (byte*)scan0.ToPointer();
                    int offset = (y * data.Stride) + (3 * x);
                    byte* px = (imagePointer + offset);
@@ -186,8 +185,8 @@ namespace Mandelbrot
 
             rMin = (initRMin - moveX) * (1 / zoom);
             rMax = (initRMax - moveX) * (1 / zoom);
-            iMin = (initIMin + moveY) * (1 / zoom);
-            iMax = (initIMax + moveY) * (1 / zoom);
+            iMin = (initIMin - moveY) * (1 / zoom);
+            iMax = (initIMax - moveY) * (1 / zoom);
         }
 
     }
