@@ -115,7 +115,8 @@ namespace Mandelbrot
                        double Z_re2 = Z_re * Z_re, Z_im2 = Z_im * Z_im;
                        if (Z_re2 + Z_im2 > 4)
                        {
-                           pixel = Color.FromArgb(0, (8 * d) % 255, (16 * d) % 255);
+                           //pixel = Color.FromArgb(0, (8 * d) % 255, (16 * d) % 255);
+                           pixel = Color.FromArgb(0, (int)(((double)d / depth) * 255d), 0);
                            break;
                        }
                        Z_im = 2 * Z_re * Z_im + c_im;
