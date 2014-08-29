@@ -13,21 +13,31 @@ using System.Drawing.Imaging;
 
 namespace Mandelbrot
 {
-    public partial class frmMain : Form
+    public partial class frmMandelbrot : Form
     {
         Bitmap mandelbrot;
+
         private int width = 1920;
         private int height = 1080;
         private int depth = 200;
+
         private double rMin = -2.5;
         private double rMax = 1.0;
         private double iMin = -1.2;
         private double iMax = 1.2;
 
+        double zoomFactor = 0.1;
+        double zoomMultiplier = 0.1;
+
+        private double rMinTemp = -2.5;
+        private double rMaxTemp = 1.0;
+        private double iMinTemp = -1.2;
+        private double iMaxTemp = 1.2;
+
         private DateTime timeStart;
         private DateTime timeEnd;
 
-        public frmMain()
+        public frmMandelbrot()
         {
             InitializeComponent();
         }
@@ -35,6 +45,17 @@ namespace Mandelbrot
 
         private void btnDraw_Click(object sender, EventArgs e)
         {
+            DrawMandelbrot();            
+        }
+
+        private void DrawMandelbrot()
+        {
+            
+            rMinTemp = rMin;
+            rMaxTemp = rMax;
+            iMinTemp = iMin;
+            iMaxTemp = iMax;
+
             if (btnDraw.Text == "Cancel")
             {
                 btnDraw.Text = "Draw mandelbrot";
@@ -54,7 +75,6 @@ namespace Mandelbrot
                 lblDuration.Text = "Duration:";
                 bgWorker.RunWorkerAsync();
             }
-            
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -66,6 +86,10 @@ namespace Mandelbrot
             numRMax.Value = Convert.ToDecimal(rMax);
             numIMin.Value = Convert.ToDecimal(iMin);
             numIMax.Value = Convert.ToDecimal(iMax);
+            txtRMin.Text = rMin.ToString();
+            txtRMax.Text = rMax.ToString();
+            txtIMin.Text = iMin.ToString();
+            txtIMax.Text = iMax.ToString();
         }
 
         private void numWidth_ValueChanged(object sender, EventArgs e)
@@ -90,9 +114,12 @@ namespace Mandelbrot
             double pixels_done = 0;
 
             double rScale = (rMax - rMin) / (width - 1); 
-            double iScale = (iMax - iMin) / (height - 1); 
+            double iScale = (iMax - iMin) / (height - 1);
 
             mandelbrot = new Bitmap(width, height);
+            System.GC.Collect();
+            System.GC.WaitForPendingFinalizers();
+
             BitmapData data = mandelbrot.LockBits(new Rectangle(0, 0, mandelbrot.Width, mandelbrot.Height), ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
             IntPtr scan0 = data.Scan0;
 
@@ -115,7 +142,6 @@ namespace Mandelbrot
                        double Z_re2 = Z_re * Z_re, Z_im2 = Z_im * Z_im;
                        if (Z_re2 + Z_im2 > 4)
                        {
-                           //pixel = Color.FromArgb(0, (8 * d) % 255, (16 * d) % 255);
                            pixel = Color.FromArgb(0, (int)(((double)d / depth) * 255d), 0);
                            break;
                        }
@@ -132,11 +158,10 @@ namespace Mandelbrot
 
                    pixels_done++;
                 }
-
                 bgWorker.ReportProgress((int)((pixels_done / pixels_total) * 100.0));
-                
             });
             mandelbrot.UnlockBits(data);
+
         }
 
 
@@ -151,7 +176,7 @@ namespace Mandelbrot
                 btnDraw.Text = "Draw mandelbrot";
                 pBar.Value = 100;
             }
-            
+            pBar.Value = 0;
         }
 
         private void bgWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -173,22 +198,81 @@ namespace Mandelbrot
 
         private void mapping_Changed(object sender, EventArgs e)
         {
-            double zoom = (double)numZoom.Value;
-
+            
             double initRMin = (double)numRMin.Value;
             double initRMax = (double)numRMax.Value;
-
             double initIMin = (double)numIMin.Value;
             double initIMax = (double)numIMax.Value;
 
             double moveX = (double)numMoveX.Value;
             double moveY = (double)numMoveY.Value;
 
-            rMin = (initRMin - moveX) * (1 / zoom);
-            rMax = (initRMax - moveX) * (1 / zoom);
-            iMin = (initIMin - moveY) * (1 / zoom);
-            iMax = (initIMax - moveY) * (1 / zoom);
+            double zoom = (double)numZoom.Value;
+            
+            double ratio = (initRMax - initRMin) / (initIMax - initIMin);
+            double zoomFactorX = zoomFactor * ratio;
+            double zoomFactorY = zoomFactor;
+
+            rMin = (initRMin - moveX) + ((zoom * zoomFactorX) - zoomFactorX);
+            rMax = (initRMax - moveX) - ((zoom * zoomFactorX) - zoomFactorX);
+            iMin = (initIMin - moveY) + ((zoom * zoomFactorY) - zoomFactorY);
+            iMax = (initIMax - moveY) - ((zoom * zoomFactorY) - zoomFactorY);
+
+            txtRMin.Text = rMin.ToString();
+            txtRMax.Text = rMax.ToString();
+            txtIMin.Text = iMin.ToString();
+            txtIMax.Text = iMax.ToString();
         }
 
+        private void picMandelbrot_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Clicks == 1)
+            {
+                int imageX = -1;
+                int imageY = -1;
+
+                if ((double)height / (double)picMandelbrot.Height > (double)width / (double)picMandelbrot.Width)
+                {
+                    double ratio = (double)height / (double)picMandelbrot.Height;
+                    double offset = (picMandelbrot.Width - (width / ratio)) / 2;
+                    imageX = (int)((e.X - offset) * ratio);
+                    imageY = (int)(e.Y * ratio);
+                }
+                else
+                {
+                    double ratio = (double)width / (double)picMandelbrot.Width;
+                    double offset = (picMandelbrot.Height - (height / ratio)) / 2;
+                    imageX = (int)(e.X * ratio);
+                    imageY = (int)((e.Y - offset) * ratio);
+                }
+
+                if (imageX > 0 && imageX < width && imageY > 0 && imageY < height)
+                {
+                    CenterMandelbrot(imageX, imageY);                    
+                }
+                
+            }
+            else
+            {
+                DrawMandelbrot();
+            }
+
+        }
+
+        private void CenterMandelbrot(int centerX, int centerY)
+        {
+            double moveXpercentage = 1 - (centerX / (double)(width / 2));
+            double moveYpercentage = 1 - (centerY / (double)(height / 2));
+
+            double initRMin = (double)numRMin.Value;
+            double initIMin = (double)numIMin.Value;
+
+            double rMinShouldBe = rMinTemp + (moveXpercentage * rMinTemp);
+            double iMinShouldBe = iMinTemp - (moveYpercentage * iMinTemp);
+
+            numMoveX.Value = Convert.ToDecimal(initRMin - rMinShouldBe);
+            numMoveY.Value = Convert.ToDecimal(initIMin - iMinShouldBe);
+
+        }
     }
 }

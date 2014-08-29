@@ -1,6 +1,6 @@
 ﻿namespace Mandelbrot
 {
-    partial class frmMain
+    partial class frmMandelbrot
     {
         /// <summary>
         /// Required designer variable.
@@ -56,6 +56,12 @@
             this.lblMoveX = new System.Windows.Forms.Label();
             this.numMoveX = new System.Windows.Forms.NumericUpDown();
             this.numMoveY = new System.Windows.Forms.NumericUpDown();
+            this.txtRMin = new System.Windows.Forms.TextBox();
+            this.txtRMax = new System.Windows.Forms.TextBox();
+            this.txtIMin = new System.Windows.Forms.TextBox();
+            this.txtIMax = new System.Windows.Forms.TextBox();
+            this.btnSaveMapping = new System.Windows.Forms.Button();
+            this.btnLoadMapping = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.picMandelbrot)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numHeight)).BeginInit();
@@ -86,12 +92,13 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.picMandelbrot.BackColor = System.Drawing.Color.White;
             this.picMandelbrot.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.picMandelbrot.Location = new System.Drawing.Point(12, 94);
+            this.picMandelbrot.Location = new System.Drawing.Point(12, 138);
             this.picMandelbrot.Name = "picMandelbrot";
-            this.picMandelbrot.Size = new System.Drawing.Size(1050, 455);
+            this.picMandelbrot.Size = new System.Drawing.Size(1060, 411);
             this.picMandelbrot.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.picMandelbrot.TabIndex = 1;
             this.picMandelbrot.TabStop = false;
+            this.picMandelbrot.MouseDown += new System.Windows.Forms.MouseEventHandler(this.picMandelbrot_MouseDown);
             // 
             // numWidth
             // 
@@ -202,7 +209,7 @@
             // lblStart
             // 
             this.lblStart.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblStart.Location = new System.Drawing.Point(856, 13);
+            this.lblStart.Location = new System.Drawing.Point(866, 13);
             this.lblStart.Name = "lblStart";
             this.lblStart.Size = new System.Drawing.Size(100, 13);
             this.lblStart.TabIndex = 8;
@@ -211,7 +218,7 @@
             // lblEnd
             // 
             this.lblEnd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblEnd.Location = new System.Drawing.Point(962, 13);
+            this.lblEnd.Location = new System.Drawing.Point(972, 13);
             this.lblEnd.Name = "lblEnd";
             this.lblEnd.Size = new System.Drawing.Size(100, 13);
             this.lblEnd.TabIndex = 9;
@@ -229,15 +236,15 @@
             // 
             this.pBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.pBar.Location = new System.Drawing.Point(12, 70);
+            this.pBar.Location = new System.Drawing.Point(12, 114);
             this.pBar.Name = "pBar";
-            this.pBar.Size = new System.Drawing.Size(1049, 18);
+            this.pBar.Size = new System.Drawing.Size(1059, 18);
             this.pBar.TabIndex = 10;
             // 
             // lblDuration
             // 
             this.lblDuration.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblDuration.Location = new System.Drawing.Point(856, 26);
+            this.lblDuration.Location = new System.Drawing.Point(866, 26);
             this.lblDuration.Name = "lblDuration";
             this.lblDuration.Size = new System.Drawing.Size(206, 13);
             this.lblDuration.TabIndex = 11;
@@ -504,11 +511,67 @@
             this.numMoveY.TabIndex = 29;
             this.numMoveY.ValueChanged += new System.EventHandler(this.mapping_Changed);
             // 
-            // frmMain
+            // txtRMin
+            // 
+            this.txtRMin.Location = new System.Drawing.Point(183, 69);
+            this.txtRMin.Name = "txtRMin";
+            this.txtRMin.ReadOnly = true;
+            this.txtRMin.Size = new System.Drawing.Size(118, 20);
+            this.txtRMin.TabIndex = 30;
+            // 
+            // txtRMax
+            // 
+            this.txtRMax.Location = new System.Drawing.Point(310, 69);
+            this.txtRMax.Name = "txtRMax";
+            this.txtRMax.ReadOnly = true;
+            this.txtRMax.Size = new System.Drawing.Size(118, 20);
+            this.txtRMax.TabIndex = 31;
+            // 
+            // txtIMin
+            // 
+            this.txtIMin.Location = new System.Drawing.Point(442, 69);
+            this.txtIMin.Name = "txtIMin";
+            this.txtIMin.ReadOnly = true;
+            this.txtIMin.Size = new System.Drawing.Size(118, 20);
+            this.txtIMin.TabIndex = 32;
+            // 
+            // txtIMax
+            // 
+            this.txtIMax.Location = new System.Drawing.Point(570, 68);
+            this.txtIMax.Name = "txtIMax";
+            this.txtIMax.ReadOnly = true;
+            this.txtIMax.Size = new System.Drawing.Size(123, 20);
+            this.txtIMax.TabIndex = 33;
+            // 
+            // btnSaveMapping
+            // 
+            this.btnSaveMapping.Location = new System.Drawing.Point(706, 67);
+            this.btnSaveMapping.Name = "btnSaveMapping";
+            this.btnSaveMapping.Size = new System.Drawing.Size(59, 20);
+            this.btnSaveMapping.TabIndex = 36;
+            this.btnSaveMapping.Text = "Save";
+            this.btnSaveMapping.UseVisualStyleBackColor = true;
+            // 
+            // btnLoadMapping
+            // 
+            this.btnLoadMapping.Location = new System.Drawing.Point(765, 67);
+            this.btnLoadMapping.Name = "btnLoadMapping";
+            this.btnLoadMapping.Size = new System.Drawing.Size(59, 20);
+            this.btnLoadMapping.TabIndex = 37;
+            this.btnLoadMapping.Text = "Load";
+            this.btnLoadMapping.UseVisualStyleBackColor = true;
+            // 
+            // frmMandelbrot
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1074, 561);
+            this.ClientSize = new System.Drawing.Size(1084, 561);
+            this.Controls.Add(this.btnLoadMapping);
+            this.Controls.Add(this.btnSaveMapping);
+            this.Controls.Add(this.txtIMax);
+            this.Controls.Add(this.txtIMin);
+            this.Controls.Add(this.txtRMax);
+            this.Controls.Add(this.txtRMin);
             this.Controls.Add(this.numMoveY);
             this.Controls.Add(this.lblMoveX);
             this.Controls.Add(this.numMoveX);
@@ -536,8 +599,8 @@
             this.Controls.Add(this.numWidth);
             this.Controls.Add(this.picMandelbrot);
             this.Controls.Add(this.btnDraw);
-            this.MinimumSize = new System.Drawing.Size(1000, 600);
-            this.Name = "frmMain";
+            this.MinimumSize = new System.Drawing.Size(1100, 600);
+            this.Name = "frmMandelbrot";
             this.Text = "Mandelbrot";
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.picMandelbrot)).EndInit();
@@ -586,6 +649,12 @@
         private System.Windows.Forms.Label lblMoveX;
         private System.Windows.Forms.NumericUpDown numMoveX;
         private System.Windows.Forms.NumericUpDown numMoveY;
+        private System.Windows.Forms.TextBox txtRMin;
+        private System.Windows.Forms.TextBox txtRMax;
+        private System.Windows.Forms.TextBox txtIMin;
+        private System.Windows.Forms.TextBox txtIMax;
+        private System.Windows.Forms.Button btnSaveMapping;
+        private System.Windows.Forms.Button btnLoadMapping;
     }
 }
 
