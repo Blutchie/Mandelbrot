@@ -551,6 +551,7 @@
             this.btnSaveMapping.TabIndex = 36;
             this.btnSaveMapping.Text = "Save";
             this.btnSaveMapping.UseVisualStyleBackColor = true;
+            this.btnSaveMapping.Click += new System.EventHandler(this.btnSaveMapping_Click);
             // 
             // btnLoadMapping
             // 
@@ -560,6 +561,7 @@
             this.btnLoadMapping.TabIndex = 37;
             this.btnLoadMapping.Text = "Load";
             this.btnLoadMapping.UseVisualStyleBackColor = true;
+            this.btnLoadMapping.Click += new System.EventHandler(this.btnLoadMapping_Click);
             // 
             // frmMandelbrot
             // 

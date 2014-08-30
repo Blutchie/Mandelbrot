@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Numerics;
 using System.Threading;
 using System.Drawing.Imaging;
+using System.IO;
 
 namespace Mandelbrot
 {
@@ -290,6 +291,47 @@ namespace Mandelbrot
             
             numMoveX.Value = Convert.ToDecimal(-1 * (rMinShouldBe - (initRangeR - (initRangeR / (1 + (zoom * zoomFactor) - zoomFactor))) - initRMin));
             numMoveY.Value = Convert.ToDecimal(-1 * (iMinShouldBe - (initRangeI - (initRangeI / (1 + (zoom * zoomFactor) - zoomFactor))) - initIMin));
+        }
+
+        private void btnSaveMapping_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog save = new SaveFileDialog();
+            save.Filter = "Mandelbrot Mapping(*.mandelbrot)|*.mandelbrot";
+            save.ShowDialog();
+            if (save.FileName != "")
+            {
+                File.WriteAllText(save.FileName, width + ";" + height + ";" + depth + ";" + numMoveX.Value + ";" + numMoveY.Value + ";"
+                    + numRMin.Value + ";" + numRMax.Value + ";" + numIMin.Value + ";" + numIMax.Value + ";" + numZoom.Value);
+            }
+        }
+
+        private void btnLoadMapping_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog open = new OpenFileDialog();
+            open.Filter = "Mandelbrot Mapping(*.mandelbrot)|*.mandelbrot";
+            open.ShowDialog();
+            if (open.FileName != "")
+            {
+                try
+                {
+                    string[] values = File.ReadAllText(open.FileName).Split(';');
+                    numWidth.Value = Decimal.Parse(values[0]);
+                    numHeight.Value = Decimal.Parse(values[1]);
+                    numDepth.Value = Decimal.Parse(values[2]);
+                    numMoveX.Value = Decimal.Parse(values[3]);
+                    numMoveY.Value = Decimal.Parse(values[4]);
+                    numRMin.Value = Decimal.Parse(values[5]);
+                    numRMax.Value = Decimal.Parse(values[6]);
+                    numIMin.Value = Decimal.Parse(values[7]);
+                    numIMax.Value = Decimal.Parse(values[8]);
+                    numZoom.Value = Decimal.Parse(values[9]);
+                    DrawMandelbrot();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error loading mandelbrot: " + ex.Message);
+                }
+            }
         }
     }
 }
