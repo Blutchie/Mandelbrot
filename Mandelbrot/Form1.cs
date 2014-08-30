@@ -26,8 +26,8 @@ namespace Mandelbrot
         private double iMin = -1.2;
         private double iMax = 1.2;
 
-        double zoomFactor = 0.1;
-        double zoomMultiplier = 0.1;
+        double zoomFactor = 0.5;
+        double zoomPow = 4;
 
         private double rMinTemp = -2.5;
         private double rMaxTemp = 1.0;
@@ -208,15 +208,19 @@ namespace Mandelbrot
             double moveY = (double)numMoveY.Value;
 
             double zoom = (double)numZoom.Value;
+            zoom = Math.Pow(zoom, zoomPow);
             
             double ratio = (initRMax - initRMin) / (initIMax - initIMin);
             double zoomFactorX = zoomFactor * ratio;
             double zoomFactorY = zoomFactor;
 
-            rMin = (initRMin - moveX) + ((zoom * zoomFactorX) - zoomFactorX);
-            rMax = (initRMax - moveX) - ((zoom * zoomFactorX) - zoomFactorX);
-            iMin = (initIMin - moveY) + ((zoom * zoomFactorY) - zoomFactorY);
-            iMax = (initIMax - moveY) - ((zoom * zoomFactorY) - zoomFactorY);
+            double rangeR = (initRMax - initRMin) / 2;
+            double rangeI = (initIMax - initIMin) / 2;
+
+            rMin = (initRMin - moveX) + (rangeR - (rangeR / (1 + (zoom * zoomFactor) - zoomFactor)));
+            rMax = (initRMax - moveX) - (rangeR - (rangeR / (1 + (zoom * zoomFactor) - zoomFactor)));
+            iMin = (initIMin - moveY) + (rangeI - (rangeI / (1 + (zoom * zoomFactor) - zoomFactor)));
+            iMax = (initIMax - moveY) - (rangeI - (rangeI / (1 + (zoom * zoomFactor) - zoomFactor)));
 
             txtRMin.Text = rMin.ToString();
             txtRMax.Text = rMax.ToString();
@@ -261,18 +265,31 @@ namespace Mandelbrot
 
         private void CenterMandelbrot(int centerX, int centerY)
         {
-            double moveXpercentage = 1 - (centerX / (double)(width / 2));
-            double moveYpercentage = 1 - (centerY / (double)(height / 2));
-
             double initRMin = (double)numRMin.Value;
+            double initRMax = (double)numRMax.Value;
             double initIMin = (double)numIMin.Value;
+            double initIMax = (double)numIMax.Value;
 
-            double rMinShouldBe = rMinTemp + (moveXpercentage * rMinTemp);
-            double iMinShouldBe = iMinTemp - (moveYpercentage * iMinTemp);
+            double ratio = (initRMax - initRMin) / (initIMax - initIMin);
+            double zoomFactorX = zoomFactor * ratio;
+            double zoomFactorY = zoomFactor;
 
-            numMoveX.Value = Convert.ToDecimal(initRMin - rMinShouldBe);
-            numMoveY.Value = Convert.ToDecimal(initIMin - iMinShouldBe);
+            double moveX = (double)numMoveX.Value;
+            double moveY = (double)numMoveY.Value;
 
+            double zoom = (double)numZoom.Value;
+            zoom = Math.Pow(zoom, zoomPow);
+
+            double rangeR = (rMaxTemp - rMinTemp) / 2;
+            double rangeI = (iMaxTemp - iMinTemp) / 2;
+            double initRangeR = (initRMax - initRMin) / 2;
+            double initRangeI = (initIMax - initIMin) / 2;
+
+            double rMinShouldBe = (((double)centerX / (double)width) * (rMaxTemp - rMinTemp)) + rMinTemp - rangeR;
+            double iMinShouldBe = ((1 - ((double)centerY / (double)height)) * (iMaxTemp - iMinTemp)) + iMinTemp - rangeI;
+            
+            numMoveX.Value = Convert.ToDecimal(-1 * (rMinShouldBe - (initRangeR - (initRangeR / (1 + (zoom * zoomFactor) - zoomFactor))) - initRMin));
+            numMoveY.Value = Convert.ToDecimal(-1 * (iMinShouldBe - (initRangeI - (initRangeI / (1 + (zoom * zoomFactor) - zoomFactor))) - initIMin));
         }
     }
 }
