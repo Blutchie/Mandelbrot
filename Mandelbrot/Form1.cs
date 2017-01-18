@@ -29,7 +29,7 @@ namespace Mandelbrot
 
         double zoomFactor = 0.5;
         double zoomPow = 4;
-
+        string test = "";
         private double rMinTemp = -2.5;
         private double rMaxTemp = 1.0;
         private double iMinTemp = -1.2;
